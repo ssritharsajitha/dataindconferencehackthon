@@ -1,28 +1,25 @@
 
-Your legacy worksheets have been moved to your personal workspace ("My Workspace").
-Show me now
-Workspaces
-Databases
-Supplier Risk Radar
+**Supplier Risk Radar**
 A Snowflake-native app for supplier quality and procurement managers. It ranks suppliers by risk, explains why with defect and warranty evidence, and recommends an action.
 
-Built on the AUTO_MFG_DW database.
+**Built on the AUTO_MFG_DW database.**
 
-What it includes
+**What it includes**
 Component	Object	Purpose
 Risk score view	AUTO_MFG_DW.SUPPLIER_RADAR.SUPPLIER_RISK	0-100 score per supplier (higher is riskier), band (HIGH / MEDIUM / LOW) and recommended action
 AI summaries	AUTO_MFG_DW.SUPPLIER_RADAR.SUPPLIER_ISSUE_SUMMARY	AI_AGG summary of recurring defect themes and root causes, for HIGH-risk suppliers only
 Semantic view	AUTO_MFG_DW.SUPPLIER_RADAR.SUPPLIER_RISK_SV	Lets Cortex Analyst answer natural-language questions
 Cortex Agent	AUTO_MFG_DW.SUPPLIER_RADAR.SUPPLIER_RISK_AGENT	Ranks suppliers and recommends actions
 Streamlit app	streamlit_app.py	Watchlist, supplier drill-down and an "Ask the radar" chat box
-How the risk score works
+
+**How the risk score works**
 Weighted blend of: quality rating (25%), on-time delivery (20%, capped at 100%), defects per 1,000 orders (25%), critical-defect share (10%), defect increase over the last 90 days vs the prior 90 (10%), and warranty cost of parts the supplier provides (10%, percentile rank).
 
 Bands: HIGH >= 40, MEDIUM 25-40, LOW < 25. The weights and cutoffs are judgment calls; edit them in setup.sql.
 
 Warranty cost is linked to suppliers through purchase orders (supplier -> part -> warranty claim), so a part bought from several suppliers counts toward each.
 
-Setup
+**Setup**
 Make sure these exist: AUTO_MFG_DW.SUPPLY_CHAIN.SUPPLIERS, SUPPLY_CHAIN.PURCHASE_ORDERS, QUALITY.DEFECTS, QUALITY.WARRANTY_CLAIMS.
 Run setup.sql top to bottom. It creates the schema, view, summary table, semantic view and agent.
 Step 2 calls AI_AGG over the defect text of HIGH-risk suppliers, which uses Cortex credits. Your role needs access to Cortex AI functions.
